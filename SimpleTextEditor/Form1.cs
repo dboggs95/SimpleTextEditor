@@ -27,7 +27,8 @@ namespace SimpleTextEditor
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            ofd.Filter = "Text File|*.txt";
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 button2.Enabled = true;
                 path = ofd.FileName;
@@ -51,6 +52,19 @@ namespace SimpleTextEditor
             StreamWriter sw = new StreamWriter(File.Create(path));
             sw.Write(textBox1.Text);
             sw.Dispose();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Text File|*.txt";
+            if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                path = sfd.FileName;
+                StreamWriter sw = new StreamWriter(File.Create(path));
+                sw.Write(textBox1.Text);
+                sw.Dispose();
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
