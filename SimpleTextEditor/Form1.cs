@@ -28,7 +28,14 @@ namespace SimpleTextEditor
             if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 StreamReader sr = new StreamReader(File.OpenRead(ofd.FileName));
-                textBox1.Text = sr.ReadToEnd(); 
+                sr.BaseStream.Position = 0x0C;
+                byte[] buffer = new byte[3];
+                sr.BaseStream.Read(buffer, 0, 3);
+                foreach (byte myByte in buffer)
+                {
+                    textBox1.Text += myByte.ToString("X") + " ";
+                }
+                sr.Dispose();
             }
         }
 
