@@ -84,6 +84,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textBox1.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(0, 53);
             this.textBox1.Margin = new System.Windows.Forms.Padding(0);
             this.textBox1.Multiline = true;
@@ -414,8 +415,8 @@
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(119, 17);
-            this.toolStripStatusLabel1.Text = "line and column here";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(62, 17);
+            this.toolStripStatusLabel1.Text = "Line: , Col:";
             this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
             // 
             // toolStripSplitButton1

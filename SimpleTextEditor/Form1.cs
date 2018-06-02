@@ -28,7 +28,7 @@ namespace SimpleTextEditor
             filePath = "";
             fileName = "untitled";
             fileOpen = false;
-            this.Text = "Notepad - " + fileName;
+            this.Text = "Notepad - " + fileName; //TODO: there should be a star after this when a file is edited.
 
             psd.Document = pdo;
             pdo.DocumentName = fileName;
@@ -204,16 +204,31 @@ namespace SimpleTextEditor
 
         private void timeDateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DateTime currentTime = new DateTime();
-            string line = currentTime.Hour.ToString() + ":" + currentTime.Minute.ToString() + " " + currentTime.Month.ToString() + " " + currentTime.Day.ToString() + ", " + currentTime.Year.ToString();
-            //TODO: Enter current time wherever insertion point is.
+            //TODO: Make this go faster!!!
+            DateTime currentTime = DateTime.Now;
+            int currentPosition = textBox1.SelectionStart;
+            string line = currentTime.ToString("h:mm tt, MMMM d, yyyy");
+            string before = "";
+            string after = "";
+            for(int i = 0; i < currentPosition; i++)
+            {
+                before += textBox1.Text[i];
+            }
+            for(int i = currentPosition; i < textBox1.TextLength; i++)
+            {
+                after += textBox1.Text[i];
+            }
+            textBox1.Text = before + line + after;
+            textBox1.SelectionStart = currentPosition;
         }
 
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
         {
             //TODO: Make this automatically update. Add word count and character count.
-            int lineNum = textBox1.GetLineFromCharIndex(textBox1.GetFirstCharIndexOfCurrentLine());
-            toolStripStatusLabel1.Text = "Line: " + lineNum;
+            int currentIndex = textBox1.GetFirstCharIndexOfCurrentLine();
+            int lineNum = textBox1.GetLineFromCharIndex(currentIndex);
+            int colNum = textBox1.SelectionStart - currentIndex;
+            toolStripStatusLabel1.Text = "Line: " + lineNum + ", Col: " + colNum;
         }
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
