@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -14,7 +16,11 @@ namespace SimpleTextEditor
     {
         private string filePath;
         private string fileName;
-        private Boolean fileOpen; //Not yet used. Will use an event to active buttons when this becomes true.
+        private Boolean fileOpen;
+
+        private PageSetupDialog psd = new PageSetupDialog();
+        private PrintDocument pdo = new PrintDocument();
+        private PrintDialog ptd = new PrintDialog();
 
         public Form1()
         {
@@ -23,6 +29,23 @@ namespace SimpleTextEditor
             fileName = "untitled";
             fileOpen = false;
             this.Text = "Notepad - " + fileName;
+
+            psd.Document = pdo;
+            pdo.DocumentName = fileName;
+            pdo.PrintPage += new PrintPageEventHandler(this.pd_Print);
+            ptd.AllowSelection = true;
+            ptd.AllowSomePages = true;
+        }
+
+        private void pd_Print(object sender, PrintPageEventArgs ppeArgs)
+        {
+            DrawGraphicsItem(ppeArgs.Graphics);
+        }
+
+        private void DrawGraphicsItem(Graphics gobj)
+        {
+            gobj.TextRenderingHint = TextRenderingHint.AntiAlias;
+            gobj.DrawString(textBox1.Text, new Font("Monospace", 14), new SolidBrush(Color.Blue), 0, 0);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -35,6 +58,7 @@ namespace SimpleTextEditor
             textBox1.Text = "";
             filePath = "";
             fileName = "untitled";
+            pdo.DocumentName = fileName;
             this.Text = "Notepad - " + fileName;
             fileOpen = false;
         }
@@ -48,6 +72,7 @@ namespace SimpleTextEditor
                 fileOpen = true;
                 filePath = ofd.FileName;
                 fileName = ofd.SafeFileName;
+                pdo.DocumentName = fileName;
                 this.Text = "Notepad - " + fileName;
                 StreamReader sr = new StreamReader(filePath);
                 textBox1.Text = sr.ReadToEnd();
@@ -78,6 +103,7 @@ namespace SimpleTextEditor
             {
                 filePath = sfd.FileName;
                 fileName = Path.GetFileName(filePath);
+                pdo.DocumentName = fileName;
                 this.Text = "Notepad - " + fileName;
                 StreamWriter sw = new StreamWriter(File.Create(filePath));
                 sw.Write(textBox1.Text);
@@ -128,6 +154,23 @@ namespace SimpleTextEditor
         private void wordWrapToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             textBox1.WordWrap = !textBox1.WordWrap;
+        }
+
+        private void pageSetupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(psd.ShowDialog() == DialogResult.OK)
+            {
+                pdo.DefaultPageSettings = psd.PageSettings;
+                pdo.PrinterSettings = psd.PrinterSettings;
+            }
+        }
+
+        private void printToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(ptd.ShowDialog() == DialogResult.OK)
+            {
+                pdo.Print();
+            }
         }
     }
 }

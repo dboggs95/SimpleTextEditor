@@ -84,7 +84,7 @@
             this.textBox1.Margin = new System.Windows.Forms.Padding(1);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox1.Size = new System.Drawing.Size(500, 319);
             this.textBox1.TabIndex = 1;
             this.textBox1.WordWrap = false;
@@ -355,12 +355,14 @@
             this.pageSetupToolStripMenuItem.Name = "pageSetupToolStripMenuItem";
             this.pageSetupToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pageSetupToolStripMenuItem.Text = "Page Setup";
+            this.pageSetupToolStripMenuItem.Click += new System.EventHandler(this.pageSetupToolStripMenuItem_Click);
             // 
             // printToolStripMenuItem
             // 
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
             this.printToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.printToolStripMenuItem.Text = "Print";
+            this.printToolStripMenuItem.Click += new System.EventHandler(this.printToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
