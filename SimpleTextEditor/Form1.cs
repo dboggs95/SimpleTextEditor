@@ -52,7 +52,8 @@ namespace SimpleTextEditor
 
         private void newFile()
         {
-            textBox1.Text = "";
+            textBox1.Clear();
+            textBox1.ClearUndo();
             filePath = "";
             fileName = "untitled";
             pdo.DocumentName = fileName;
@@ -177,7 +178,7 @@ namespace SimpleTextEditor
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void statusBarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -198,7 +199,32 @@ namespace SimpleTextEditor
 
         private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            
+        }
 
+        private void timeDateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DateTime currentTime = new DateTime();
+            string line = currentTime.Hour.ToString() + ":" + currentTime.Minute.ToString() + " " + currentTime.Month.ToString() + " " + currentTime.Day.ToString() + ", " + currentTime.Year.ToString();
+            //TODO: Enter current time wherever insertion point is.
+        }
+
+        private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
+        {
+            //TODO: Make this automatically update. Add word count and character count.
+            int lineNum = textBox1.GetLineFromCharIndex(textBox1.GetFirstCharIndexOfCurrentLine());
+            toolStripStatusLabel1.Text = "Line: " + lineNum;
+        }
+
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBox1.SelectAll();
+        }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //TODO: Clear undo whenever a space or newline is entered.
+            textBox1.Undo();
         }
     }
 }
