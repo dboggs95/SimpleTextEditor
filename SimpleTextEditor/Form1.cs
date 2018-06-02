@@ -124,5 +124,10 @@ namespace SimpleTextEditor
         {
             saveFile();
         }
+
+        private void wordWrapToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            textBox1.WordWrap = !textBox1.WordWrap;
+        }
     }
 }
