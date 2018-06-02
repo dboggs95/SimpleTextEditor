@@ -228,7 +228,8 @@ namespace SimpleTextEditor
             int currentIndex = textBox1.GetFirstCharIndexOfCurrentLine();
             int lineNum = textBox1.GetLineFromCharIndex(currentIndex);
             int colNum = textBox1.SelectionStart - currentIndex;
-            toolStripStatusLabel1.Text = "Line: " + lineNum + ", Col: " + colNum;
+            int numChar = textBox1.TextLength;
+            toolStripStatusLabel1.Text = "Line: " + lineNum + ", Col: " + colNum + ", Char: " + numChar;
         }
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -240,6 +241,40 @@ namespace SimpleTextEditor
         {
             //TODO: Clear undo whenever a space or newline is entered.
             textBox1.Undo();
+        }
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBox1.Cut();
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBox1.Copy();
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBox1.Paste();
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //TODO: Make this go faster!!! Make it work with undo.
+            int currentPosition = textBox1.SelectionStart;
+            int length = textBox1.SelectionLength;
+            string before = "";
+            string after = "";
+            for (int i = 0; i < currentPosition; i++)
+            {
+                before += textBox1.Text[i];
+            }
+            for (int i = currentPosition + length; i < textBox1.TextLength; i++)
+            {
+                after += textBox1.Text[i];
+            }
+            textBox1.Text = before + after;
+            textBox1.SelectionStart = currentPosition;
         }
     }
 }
