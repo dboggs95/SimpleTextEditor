@@ -12,14 +12,17 @@ namespace SimpleTextEditor
 {
     public partial class Form1 : Form
     {
-        private string path;
+        private string filePath;
+        private string fileName;
         private Boolean fileOpen; //Not yet used. Will use an event to active buttons when this becomes true.
 
         public Form1()
         {
             InitializeComponent();
-            this.Text = "Notepad";
+            filePath = "";
+            fileName = "untitled";
             fileOpen = false;
+            this.Text = "Notepad - " + fileName;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -29,17 +32,11 @@ namespace SimpleTextEditor
 
         private void newFile()
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Text File|*.txt";
-            sfd.Title = "New";
-            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                button2.Enabled = true;
-                path = sfd.FileName;
-                StreamWriter sw = new StreamWriter(File.Create(path));
-                sw.Dispose();
-                textBox1.Text = "";
-            }
+            textBox1.Text = "";
+            filePath = "";
+            fileName = "untitled";
+            this.Text = "Notepad - " + fileName;
+            fileOpen = false;
         }
 
         private void openFile()
@@ -48,9 +45,11 @@ namespace SimpleTextEditor
             ofd.Filter = "Text File|*.txt";
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                button2.Enabled = true;
-                path = ofd.FileName;
-                StreamReader sr = new StreamReader(path);
+                fileOpen = true;
+                filePath = ofd.FileName;
+                fileName = ofd.SafeFileName;
+                this.Text = "Notepad - " + fileName;
+                StreamReader sr = new StreamReader(filePath);
                 textBox1.Text = sr.ReadToEnd();
                 sr.Dispose();
             }
@@ -58,9 +57,17 @@ namespace SimpleTextEditor
 
         private void saveFile()
         {
-            StreamWriter sw = new StreamWriter(File.Create(path));
-            sw.Write(textBox1.Text);
-            sw.Dispose();
+            if (fileOpen == false)
+            {
+                saveAsFile();
+                fileOpen = true;
+            }
+            else
+            {
+                StreamWriter sw = new StreamWriter(File.Create(filePath));
+                sw.Write(textBox1.Text);
+                sw.Dispose();
+            }
         }
 
         private void saveAsFile()
@@ -69,32 +76,23 @@ namespace SimpleTextEditor
             sfd.Filter = "Text File|*.txt";
             if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                button2.Enabled = true;
-                path = sfd.FileName;
-                StreamWriter sw = new StreamWriter(File.Create(path));
+                filePath = sfd.FileName;
+                fileName = Path.GetFileName(filePath);
+                this.Text = "Notepad - " + fileName;
+                StreamWriter sw = new StreamWriter(File.Create(filePath));
                 sw.Write(textBox1.Text);
                 sw.Dispose();
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            openFile();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            saveFile();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            saveAsFile();
-        }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            newFile();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -112,9 +110,19 @@ namespace SimpleTextEditor
             saveAsFile();
         }
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        private void toolStripButton1_Click(object sender, EventArgs e)
         {
             newFile();
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            openFile();
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            saveFile();
         }
     }
 }
