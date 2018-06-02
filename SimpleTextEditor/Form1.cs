@@ -12,6 +12,8 @@ namespace SimpleTextEditor
 {
     public partial class Form1 : Form
     {
+        private string path; 
+
         public Form1()
         {
             InitializeComponent();
@@ -27,16 +29,28 @@ namespace SimpleTextEditor
             OpenFileDialog ofd = new OpenFileDialog();
             if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                StreamReader sr = new StreamReader(File.OpenRead(ofd.FileName));
-                sr.BaseStream.Position = 0x0C;
+                button2.Enabled = true;
+                path = ofd.FileName;
+                StreamReader sr = new StreamReader(path);
+                textBox1.Text = sr.ReadToEnd();
+                sr.Dispose();
+                
+                /* sr.BaseStream.Position = 0x0C;
                 byte[] buffer = new byte[3];
                 sr.BaseStream.Read(buffer, 0, 3);
                 foreach (byte myByte in buffer)
                 {
                     textBox1.Text += myByte.ToString("X") + " ";
                 }
-                sr.Dispose();
+                sr.Dispose(); */
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            StreamWriter sw = new StreamWriter(File.Create(path));
+            sw.Write(textBox1.Text);
+            sw.Dispose();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
