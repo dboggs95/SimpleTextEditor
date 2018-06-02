@@ -32,9 +32,10 @@ namespace SimpleTextEditor
 
             psd.Document = pdo;
             pdo.DocumentName = fileName;
+
             pdo.PrintPage += new PrintPageEventHandler(this.pd_Print);
-            ptd.AllowSelection = true;
-            ptd.AllowSomePages = true;
+            //ptd.AllowSelection = false;
+            //ptd.AllowSomePages = false;
         }
 
         private void pd_Print(object sender, PrintPageEventArgs ppeArgs)
@@ -45,7 +46,7 @@ namespace SimpleTextEditor
         private void DrawGraphicsItem(Graphics gobj)
         {
             gobj.TextRenderingHint = TextRenderingHint.AntiAlias;
-            gobj.DrawString(textBox1.Text, new Font("Monospace", 14), new SolidBrush(Color.Blue), 0, 0);
+            gobj.DrawString(textBox1.Text, new Font("Monospace", 14), new SolidBrush(Color.Black), 0, 0);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -161,7 +162,7 @@ namespace SimpleTextEditor
             if(psd.ShowDialog() == DialogResult.OK)
             {
                 pdo.DefaultPageSettings = psd.PageSettings;
-                pdo.PrinterSettings = psd.PrinterSettings;
+                //pdo.PrinterSettings = psd.PrinterSettings;
             }
         }
 
