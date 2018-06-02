@@ -33,18 +33,14 @@ namespace SimpleTextEditor
             psd.Document = pdo;
             pdo.DocumentName = fileName;
 
-            pdo.PrintPage += new PrintPageEventHandler(this.pd_Print);
+            pdo.PrintPage += new PrintPageEventHandler(this.pdo_Print);
             //ptd.AllowSelection = false;
             //ptd.AllowSomePages = false;
         }
 
-        private void pd_Print(object sender, PrintPageEventArgs ppeArgs)
+        private void pdo_Print(object sender, PrintPageEventArgs ppeArgs)
         {
-            DrawGraphicsItem(ppeArgs.Graphics);
-        }
-
-        private void DrawGraphicsItem(Graphics gobj)
-        {
+            Graphics gobj = ppeArgs.Graphics;
             gobj.TextRenderingHint = TextRenderingHint.AntiAlias;
             gobj.DrawString(textBox1.Text, new Font("Monospace", 14), new SolidBrush(Color.Black), 0, 0);
         }
@@ -177,6 +173,32 @@ namespace SimpleTextEditor
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void statusBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Size tempSize = textBox1.Size;
+            if (statusStrip1.Visible)
+            {
+                tempSize.Height += 22;
+                textBox1.Size = tempSize;
+            }
+            else
+            {
+                tempSize.Height -= 22;
+                textBox1.Size = tempSize;
+            }
+            statusStrip1.Visible = !statusStrip1.Visible;
+        }
+
+        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }
