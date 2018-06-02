@@ -60,6 +60,7 @@ namespace SimpleTextEditor
             sfd.Filter = "Text File|*.txt";
             if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                button2.Enabled = true;
                 path = sfd.FileName;
                 StreamWriter sw = new StreamWriter(File.Create(path));
                 sw.Write(textBox1.Text);
