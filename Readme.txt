@@ -1,7 +1,7 @@
 This readme was written in this simple text editor.
 3:48 PM, June 3, 2018
 
-I wrote this notepad like program to learn C#. It has most of the features of the regular Windows Notepad program (with a few issues I haven't worked out yet). It's not bad for two and a half days of coding.
+I wrote this notepad like program to learn C#. For the basics, I following some video tutorials by The New Boston, a YouTube channel, and for printing I used this tutorial from C-Sharp Corner: https://www.c-sharpcorner.com/uploadfile/puranindia/pagesetupdialog-in-C-Sharp/. It has most of the features of the regular Windows Notepad program (with a few issues I haven't worked out yet). It's not bad for two and a half days of coding.
 
 Issues:
 Printing does not go past one page for some reason.
