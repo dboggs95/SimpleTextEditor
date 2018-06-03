@@ -1,10 +1,10 @@
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\bin\Debug\SimpleTextEditor.exe
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\bin\Debug\SimpleTextEditor.pdb
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.csprojAssemblyReference.cache
-C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.Form1.resources
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.Properties.Resources.resources
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.csproj.GenerateResource.cache
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.csproj.CoreCompileInputs.cache
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.exe
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.pdb
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.GoTo.resources
+C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.Main.resources

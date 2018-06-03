@@ -12,7 +12,7 @@ using System.IO;
 
 namespace SimpleTextEditor
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
         private string filePath;
         private string fileName;
@@ -22,7 +22,7 @@ namespace SimpleTextEditor
         private PrintDocument pdo = new PrintDocument();
         private PrintDialog ptd = new PrintDialog();
 
-        public Form1()
+        public Main()
         {
             InitializeComponent();
             newFile();
@@ -196,11 +196,6 @@ namespace SimpleTextEditor
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
-        {
-            
         }
 
         private void statusBarToolStripMenuItem_Click(object sender, EventArgs e)
