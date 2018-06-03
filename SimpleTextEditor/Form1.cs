@@ -17,7 +17,6 @@ namespace SimpleTextEditor
         private string filePath;
         private string fileName;
         private Boolean fileOpen;
-        private Boolean fileIO;
 
         private PageSetupDialog psd = new PageSetupDialog();
         private PrintDocument pdo = new PrintDocument();
@@ -26,7 +25,6 @@ namespace SimpleTextEditor
         public Form1()
         {
             InitializeComponent();
-            fileIO = false;
             newFile();
 
             psd.Document = pdo;
@@ -55,8 +53,10 @@ namespace SimpleTextEditor
             filePath = "";
             fileName = "untitled";
             pdo.DocumentName = fileName;
-            this.Text = "Notepad - " + fileName + "*";
             fileOpen = false;
+            textBox1.Modified = false;
+            this.Text = "Notepad - " + fileName + "*";
+            toolStripStatusLabel1.Text = "Line: " + 0 + ", Col: " + 0 + ", Char: " + 0 + " | Lines: " + 0 + " Chars: " + 0;
         }
 
         private void openFile()
@@ -69,11 +69,11 @@ namespace SimpleTextEditor
                 filePath = ofd.FileName;
                 fileName = ofd.SafeFileName;
                 pdo.DocumentName = fileName;
-                this.Text = "Notepad - " + fileName;
                 StreamReader sr = new StreamReader(filePath);
                 textBox1.Text = sr.ReadToEnd();
                 sr.Dispose();
-                fileIO = true;
+                textBox1.Modified = false;
+                this.Text = "Notepad - " + fileName;
             }
         }
 
@@ -89,7 +89,8 @@ namespace SimpleTextEditor
                 StreamWriter sw = new StreamWriter(File.Create(filePath));
                 sw.Write(textBox1.Text);
                 sw.Dispose();
-                fileIO = true;
+                textBox1.Modified = false;
+                this.Text = "Notepad - " + fileName;
             }
         }
 
@@ -102,18 +103,29 @@ namespace SimpleTextEditor
                 filePath = sfd.FileName;
                 fileName = Path.GetFileName(filePath);
                 pdo.DocumentName = fileName;
-                this.Text = "Notepad - " + fileName;
                 StreamWriter sw = new StreamWriter(File.Create(filePath));
                 sw.Write(textBox1.Text);
                 sw.Dispose();
-                fileIO = true;
+                textBox1.Modified = false;
+                this.Text = "Notepad - " + fileName;
             }
+        }
+
+        private void updateStatusBar()
+        {
+            int currentIndex = textBox1.GetFirstCharIndexOfCurrentLine();
+            int lineNum = textBox1.GetLineFromCharIndex(currentIndex);
+            int colNum = textBox1.SelectionStart - currentIndex;
+            int numChar = textBox1.TextLength;
+            int numLines = textBox1.GetLineFromCharIndex(numChar);
+            toolStripStatusLabel1.Text = "Line: " + lineNum + ", Col: " + colNum + ", Char: " + currentIndex + " | Lines: " + numLines + " Chars: " + numChar;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             //TODO: Find a way to add a star to title only when the user edits the text.
-            if(textBox1.SelectionStart != 0)
+            this.Text = "Notepad - " + fileName + "*";
+            if (textBox1.SelectionStart != 0)
             {
                 char c = textBox1.Text[textBox1.SelectionStart - 1];
                 if (c == 0x20 || c == 0x0A)
@@ -121,6 +133,7 @@ namespace SimpleTextEditor
                     textBox1.ClearUndo();
                 }
             }
+            updateStatusBar();
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -234,11 +247,12 @@ namespace SimpleTextEditor
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
         {
             //TODO: Make this automatically update. Add word count and character count.
-            int currentIndex = textBox1.GetFirstCharIndexOfCurrentLine();
+            /*int currentIndex = textBox1.GetFirstCharIndexOfCurrentLine();
             int lineNum = textBox1.GetLineFromCharIndex(currentIndex);
             int colNum = textBox1.SelectionStart - currentIndex;
             int numChar = textBox1.TextLength;
-            toolStripStatusLabel1.Text = "Line: " + lineNum + ", Col: " + colNum + ", Char: " + numChar;
+            toolStripStatusLabel1.Text = "Line: " + lineNum + ", Col: " + colNum + ", Char: " + numChar;*/
+            updateStatusBar();
         }
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -296,6 +310,16 @@ namespace SimpleTextEditor
                 textBox1.SelectionStart = textBox1.GetFirstCharIndexFromLine(gt.ReturnValue);
             }
             gt.Dispose();
+        }
+
+        private void textBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            updateStatusBar();
+        }
+
+        private void textBox1_KeyUp(object sender, KeyEventArgs e)
+        {
+            updateStatusBar();
         }
     }
 }
