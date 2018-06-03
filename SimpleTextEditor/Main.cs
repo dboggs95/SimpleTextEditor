@@ -255,7 +255,7 @@ namespace SimpleTextEditor
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            this.Text = "Notepad - " + fileName + "*";
+            this.Text = "TextEditor - " + fileName + "*";
             if (textBox1.SelectionStart != 0)
             {
                 char c = textBox1.Text[textBox1.SelectionStart - 1];
