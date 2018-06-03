@@ -17,6 +17,7 @@ namespace SimpleTextEditor
         private string filePath;
         private string fileName;
         private Boolean fileOpen;
+        private Boolean fileIO;
 
         private PageSetupDialog psd = new PageSetupDialog();
         private PrintDocument pdo = new PrintDocument();
@@ -25,13 +26,10 @@ namespace SimpleTextEditor
         public Form1()
         {
             InitializeComponent();
-            filePath = "";
-            fileName = "untitled";
-            fileOpen = false;
-            this.Text = "Notepad - " + fileName; //TODO: there should be a star after this when a file is edited.
+            fileIO = false;
+            newFile();
 
             psd.Document = pdo;
-            pdo.DocumentName = fileName;
 
             pdo.PrintPage += new PrintPageEventHandler(this.pdo_Print);
             //ptd.AllowSelection = false;
@@ -57,7 +55,7 @@ namespace SimpleTextEditor
             filePath = "";
             fileName = "untitled";
             pdo.DocumentName = fileName;
-            this.Text = "Notepad - " + fileName;
+            this.Text = "Notepad - " + fileName + "*";
             fileOpen = false;
         }
 
@@ -75,6 +73,7 @@ namespace SimpleTextEditor
                 StreamReader sr = new StreamReader(filePath);
                 textBox1.Text = sr.ReadToEnd();
                 sr.Dispose();
+                fileIO = true;
             }
         }
 
@@ -90,6 +89,7 @@ namespace SimpleTextEditor
                 StreamWriter sw = new StreamWriter(File.Create(filePath));
                 sw.Write(textBox1.Text);
                 sw.Dispose();
+                fileIO = true;
             }
         }
 
@@ -106,12 +106,21 @@ namespace SimpleTextEditor
                 StreamWriter sw = new StreamWriter(File.Create(filePath));
                 sw.Write(textBox1.Text);
                 sw.Dispose();
+                fileIO = true;
             }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
+            //TODO: Find a way to add a star to title only when the user edits the text.
+            if(textBox1.SelectionStart != 0)
+            {
+                char c = textBox1.Text[textBox1.SelectionStart - 1];
+                if (c == 0x20 || c == 0x0A)
+                {
+                    textBox1.ClearUndo();
+                }
+            }
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
