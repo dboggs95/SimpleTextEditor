@@ -276,5 +276,17 @@ namespace SimpleTextEditor
             textBox1.Text = before + after;
             textBox1.SelectionStart = currentPosition;
         }
+
+        private void goToToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //TODO: I have decided whether to do this yet, but lines and columns start with zero
+            // and maybe in the program one should be added to hide reality.
+            GoTo gt = new GoTo();
+            if(gt.ShowDialog() == DialogResult.OK)
+            {
+                textBox1.SelectionStart = textBox1.GetFirstCharIndexFromLine(gt.ReturnValue);
+            }
+            gt.Dispose();
+        }
     }
 }

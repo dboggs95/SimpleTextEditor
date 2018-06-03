@@ -324,6 +324,7 @@
             this.goToToolStripMenuItem.Name = "goToToolStripMenuItem";
             this.goToToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.goToToolStripMenuItem.Text = "Go To";
+            this.goToToolStripMenuItem.Click += new System.EventHandler(this.goToToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
