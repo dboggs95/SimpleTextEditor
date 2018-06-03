@@ -9,3 +9,5 @@ C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTe
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.GoTo.resources
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.Main.resources
 C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.About.resources
+C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.Find.resources
+C:\Users\Daryl\source\repos\SimpleTextEditor\SimpleTextEditor\obj\Debug\SimpleTextEditor.Replace.resources

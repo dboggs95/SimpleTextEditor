@@ -12,11 +12,22 @@ using System.IO;
 
 namespace SimpleTextEditor
 {
+    public enum Direction
+    {
+        UP,
+        DOWN
+    }
+
+    //TODO: Fix print so that it prints multiple pages.
     public partial class Main : Form
     {
         private string filePath;
         private string fileName;
         private Boolean fileOpen;
+
+        private string findString;
+        public Direction Direction { get; set; }
+        private Boolean matchCase;
 
         private PageSetupDialog psd = new PageSetupDialog();
         private PrintDocument pdo = new PrintDocument();
@@ -25,7 +36,10 @@ namespace SimpleTextEditor
         public Main()
         {
             InitializeComponent();
+
             newFile();
+
+            findString = "";
 
             psd.Document = pdo;
 
@@ -116,14 +130,104 @@ namespace SimpleTextEditor
             int currentIndex = textBox1.GetFirstCharIndexOfCurrentLine();
             int lineNum = textBox1.GetLineFromCharIndex(currentIndex);
             int colNum = textBox1.SelectionStart - currentIndex;
-            int numChar = textBox1.TextLength;
-            int numLines = textBox1.GetLineFromCharIndex(numChar);
-            toolStripStatusLabel1.Text = "Line: " + lineNum + ", Col: " + colNum + ", Char: " + currentIndex + " | Lines: " + numLines + " Chars: " + numChar;
+            int currentChar = colNum + currentIndex;
+            int numChar = textBox1.TextLength + 1;
+            int numLines = textBox1.GetLineFromCharIndex(numChar) + 1;
+            toolStripStatusLabel1.Text = "Line: " + lineNum + ", Col: " + colNum + ", Char: " + currentChar + " | Lines: " + numLines + " Chars: " + numChar;
+        }
+
+        public void findTextUp(string query)
+        {
+            //TODO: Find a non-insane way to do this.
+            int currentPosition = textBox1.SelectionStart;
+            int length = textBox1.SelectionLength;
+            if (textBox1.Text == "" || textBox1.Text == null || currentPosition == textBox1.TextLength)
+            {
+                MessageBox.Show("Could not find " + "\"" + query + "\"", "Find");
+                textBox1.ScrollToCaret();
+                updateStatusBar();
+                return;
+            }
+
+            char c = textBox1.Text[currentPosition];
+            int i = length - 1;
+            do
+            {
+                if (query[i].ToString() == c.ToString())
+                {
+                    i--;
+                }
+                else
+                {
+                    i = length - 1;
+                }
+                if (currentPosition != textBox1.TextLength)
+                {
+                    c = textBox1.Text[currentPosition];
+                }
+            }
+            while (currentPosition-- > 0 && i > 0);
+
+            if (i == 0)
+            {
+                textBox1.SelectionStart = currentPosition - 1;
+                textBox1.SelectionLength = length;
+            }
+            else
+            {
+                MessageBox.Show("Could not find " + "\"" + query + "\"", "Find");
+            }
+            textBox1.ScrollToCaret();
+            updateStatusBar();
+        }
+
+        public void findTextDown(string query)
+        {
+            //TODO: Find a non-insane way to do this.
+            int currentPosition = textBox1.SelectionStart;
+            int length = textBox1.SelectionLength;
+            if(textBox1.Text == "" || textBox1.Text == null || currentPosition == textBox1.TextLength)
+            {
+                MessageBox.Show("Could not find " + "\"" + query + "\"", "Find");
+                textBox1.ScrollToCaret();
+                updateStatusBar();
+                return;
+            }
+
+            char c = textBox1.Text[currentPosition];
+            int i = 0;
+            do
+            {
+                if (query[i].ToString() == c.ToString())
+                {
+                    i++;
+                }
+                else
+                {
+                    i = 0;
+                }
+                if (currentPosition != textBox1.TextLength)
+                {
+                    c = textBox1.Text[currentPosition];
+                }
+            }
+            while (currentPosition++ < textBox1.TextLength && i < query.Length);
+            
+            if (i == query.Length)
+            {
+                textBox1.SelectionStart = currentPosition - i - 1;
+                textBox1.SelectionLength = i;
+            }
+            else
+            {
+                MessageBox.Show("Could not find " + "\"" + query + "\"", "Find");
+            }
+            textBox1.ScrollToCaret();
+            updateStatusBar();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            //TODO: Find a way to add a star to title only when the user edits the text.
             this.Text = "Notepad - " + fileName + "*";
             if (textBox1.SelectionStart != 0)
             {
@@ -237,16 +341,12 @@ namespace SimpleTextEditor
             }
             textBox1.Text = before + line + after;
             textBox1.SelectionStart = currentPosition;
+            textBox1.ScrollToCaret();
+            updateStatusBar();
         }
 
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
         {
-            //TODO: Make this automatically update. Add word count and character count.
-            /*int currentIndex = textBox1.GetFirstCharIndexOfCurrentLine();
-            int lineNum = textBox1.GetLineFromCharIndex(currentIndex);
-            int colNum = textBox1.SelectionStart - currentIndex;
-            int numChar = textBox1.TextLength;
-            toolStripStatusLabel1.Text = "Line: " + lineNum + ", Col: " + colNum + ", Char: " + numChar;*/
             updateStatusBar();
         }
 
@@ -257,7 +357,6 @@ namespace SimpleTextEditor
 
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: Clear undo whenever a space or newline is entered.
             textBox1.Undo();
         }
 
@@ -293,16 +392,18 @@ namespace SimpleTextEditor
             }
             textBox1.Text = before + after;
             textBox1.SelectionStart = currentPosition;
+            textBox1.ScrollToCaret();
+            updateStatusBar();
         }
 
         private void goToToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: I have decided whether to do this yet, but lines and columns start with zero
-            // and maybe in the program one should be added to hide reality.
             GoTo gt = new GoTo();
             if(gt.ShowDialog() == DialogResult.OK)
             {
                 textBox1.SelectionStart = textBox1.GetFirstCharIndexFromLine(gt.ReturnValue);
+                textBox1.ScrollToCaret();
+                updateStatusBar();
             }
             gt.Dispose();
         }
@@ -321,7 +422,54 @@ namespace SimpleTextEditor
         {
             About about = new About();
             about.ShowDialog();
-            about.Dispose();
+            about.Dispose();  
+        }
+
+        private void findToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Find find = new Find();
+            find.findString = findString;
+            if(find.ShowDialog() == DialogResult.Cancel)
+            {
+                findString = find.findString;
+                Direction = find.Direction;
+                matchCase = find.matchCase;
+            }
+            find.Dispose();
+        }
+
+        private void findNextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(findString == "" || findString == null)
+            {
+                Find find = new Find();
+                find.findString = "";
+                if (find.ShowDialog() == DialogResult.Cancel)
+                {
+                    findString = find.findString;
+                    Direction = find.Direction;
+                    matchCase = find.matchCase;
+                }
+                find.Dispose();
+            }
+            else
+            {
+                if(this.Direction == Direction.DOWN)
+                {
+                    findTextDown(findString);
+                }
+                else
+                {
+                    findTextUp(findString);
+                }
+            }
+        }
+
+        private void replaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Replace replace = new Replace();
+            replace.ShowDialog();
+            replace.Dispose();
         }
     }
 }
