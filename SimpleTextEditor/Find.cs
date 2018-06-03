@@ -15,6 +15,7 @@ namespace SimpleTextEditor
         public Boolean matchCase { get; set; }
         public string findString { get; set; }
 
+        //TODO: allow this control to perform a search of text in the Main form.
         public Find()
         {
             InitializeComponent();

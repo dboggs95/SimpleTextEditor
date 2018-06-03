@@ -43,6 +43,11 @@ namespace SimpleTextEditor
 
             psd.Document = pdo;
 
+            //findToolStripMenuItem.Enabled = false;
+            replaceToolStripMenuItem.Enabled = false;
+            fontToolStripMenuItem.Enabled = false;
+            statusBarToolStripMenuItem.Checked = true;
+
             pdo.PrintPage += new PrintPageEventHandler(this.pdo_Print);
             //ptd.AllowSelection = false;
             //ptd.AllowSomePages = false;
@@ -69,7 +74,7 @@ namespace SimpleTextEditor
             pdo.DocumentName = fileName;
             fileOpen = false;
             textBox1.Modified = false;
-            this.Text = "Notepad - " + fileName + "*";
+            this.Text = "TextEditor - " + fileName + "*";
             toolStripStatusLabel1.Text = "Line: " + 0 + ", Col: " + 0 + ", Char: " + 0 + " | Lines: " + 0 + " Chars: " + 0;
         }
 
@@ -87,7 +92,7 @@ namespace SimpleTextEditor
                 textBox1.Text = sr.ReadToEnd();
                 sr.Dispose();
                 textBox1.Modified = false;
-                this.Text = "Notepad - " + fileName;
+                this.Text = "TextEditor - " + fileName;
             }
         }
 
@@ -96,7 +101,6 @@ namespace SimpleTextEditor
             if (fileOpen == false)
             {
                 saveAsFile();
-                fileOpen = true;
             }
             else
             {
@@ -104,7 +108,7 @@ namespace SimpleTextEditor
                 sw.Write(textBox1.Text);
                 sw.Dispose();
                 textBox1.Modified = false;
-                this.Text = "Notepad - " + fileName;
+                this.Text = "TextEditor - " + fileName;
             }
         }
 
@@ -121,7 +125,8 @@ namespace SimpleTextEditor
                 sw.Write(textBox1.Text);
                 sw.Dispose();
                 textBox1.Modified = false;
-                this.Text = "Notepad - " + fileName;
+                this.Text = "TextEditor - " + fileName;
+                fileOpen = true;
             }
         }
 
@@ -226,6 +231,28 @@ namespace SimpleTextEditor
             updateStatusBar();
         }
 
+        private void timeDate()
+        {
+            //TODO: Make this go faster!!!
+            DateTime currentTime = DateTime.Now;
+            int currentPosition = textBox1.SelectionStart;
+            string line = currentTime.ToString("h:mm tt, MMMM d, yyyy");
+            string before = "";
+            string after = "";
+            for (int i = 0; i < currentPosition; i++)
+            {
+                before += textBox1.Text[i];
+            }
+            for (int i = currentPosition; i < textBox1.TextLength; i++)
+            {
+                after += textBox1.Text[i];
+            }
+            textBox1.Text = before + line + after;
+            textBox1.SelectionStart = currentPosition;
+            textBox1.ScrollToCaret();
+            updateStatusBar();
+        }
+
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             this.Text = "Notepad - " + fileName + "*";
@@ -278,6 +305,7 @@ namespace SimpleTextEditor
         private void wordWrapToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             textBox1.WordWrap = !textBox1.WordWrap;
+            wordWrapToolStripMenuItem1.Checked = !wordWrapToolStripMenuItem1.Checked;
         }
 
         private void pageSetupToolStripMenuItem_Click(object sender, EventArgs e)
@@ -316,6 +344,7 @@ namespace SimpleTextEditor
                 textBox1.Size = tempSize;
             }
             statusStrip1.Visible = !statusStrip1.Visible;
+            statusBarToolStripMenuItem.Checked = !statusBarToolStripMenuItem.Checked;
         }
 
         private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -325,24 +354,7 @@ namespace SimpleTextEditor
 
         private void timeDateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: Make this go faster!!!
-            DateTime currentTime = DateTime.Now;
-            int currentPosition = textBox1.SelectionStart;
-            string line = currentTime.ToString("h:mm tt, MMMM d, yyyy");
-            string before = "";
-            string after = "";
-            for(int i = 0; i < currentPosition; i++)
-            {
-                before += textBox1.Text[i];
-            }
-            for(int i = currentPosition; i < textBox1.TextLength; i++)
-            {
-                after += textBox1.Text[i];
-            }
-            textBox1.Text = before + line + after;
-            textBox1.SelectionStart = currentPosition;
-            textBox1.ScrollToCaret();
-            updateStatusBar();
+            timeDate();
         }
 
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
@@ -399,23 +411,13 @@ namespace SimpleTextEditor
         private void goToToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GoTo gt = new GoTo();
-            if(gt.ShowDialog() == DialogResult.OK)
+            if (gt.ShowDialog() == DialogResult.OK)
             {
                 textBox1.SelectionStart = textBox1.GetFirstCharIndexFromLine(gt.ReturnValue);
                 textBox1.ScrollToCaret();
                 updateStatusBar();
             }
             gt.Dispose();
-        }
-
-        private void textBox1_MouseClick(object sender, MouseEventArgs e)
-        {
-            updateStatusBar();
-        }
-
-        private void textBox1_KeyUp(object sender, KeyEventArgs e)
-        {
-            updateStatusBar();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -470,6 +472,106 @@ namespace SimpleTextEditor
             Replace replace = new Replace();
             replace.ShowDialog();
             replace.Dispose();
+        }
+
+        private void textBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            updateStatusBar();
+        }
+
+        private void textBox1_KeyUp(object sender, KeyEventArgs e)
+        {
+            updateStatusBar();
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            /* if (Control.ModifierKeys.HasFlag(Keys.Control))
+             {
+                 switch (e.KeyCode)
+                 {
+                     case Keys.N:
+                         newFile();
+                         break;
+                     case Keys.O:
+                         openFile();
+                         break;
+                     case Keys.S:
+                         saveFile();
+                         break;
+                     case Keys.P:
+                         if (ptd.ShowDialog() == DialogResult.OK)
+                         {
+                             pdo.Print();
+                         }
+                         break;
+                     case Keys.F:
+                         textBox1.Undo();
+                         break;
+                     case Keys.H:
+                         break;
+                     case Keys.G:
+                         GoTo gt = new GoTo();
+                         if (gt.ShowDialog() == DialogResult.OK)
+                         {
+                             textBox1.SelectionStart = textBox1.GetFirstCharIndexFromLine(gt.ReturnValue);
+                             textBox1.ScrollToCaret();
+                             updateStatusBar();
+                         }
+                         gt.Dispose();
+                         break;
+                     case Keys.A:
+                         textBox1.SelectAll();
+                         break;
+                     default:
+                         break;
+                 }
+             }
+             switch (e.KeyCode)
+             {
+                 case Keys.F3:
+                     if (findString == "" || findString == null)
+                     {
+                         Find find = new Find();
+                         find.findString = "";
+                         if (find.ShowDialog() == DialogResult.Cancel)
+                         {
+                             findString = find.findString;
+                             Direction = find.Direction;
+                             matchCase = find.matchCase;
+                         }
+                         find.Dispose();
+                     }
+                     else
+                     {
+                         if (this.Direction == Direction.DOWN)
+                         {
+                             findTextDown(findString);
+                         }
+                         else
+                         {
+                             findTextUp(findString);
+                         }
+                     }
+                     break;
+                 case Keys.F5:
+                     timeDate();
+                     break;
+                 default:
+                     break;
+             }*/
+        }
+
+        private void textBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            
+
+            
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            
         }
     }
 }
