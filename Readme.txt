@@ -1,9 +1,11 @@
 This readme was written in this simple text editor.
+3:48 PM, June 3, 2018
 
-I wrote this notepad like program to learn C#. It has most of the features of the regular Windows Notepad program (with a few issues I haven't worked out yet).
+I wrote this notepad like program to learn C#. It has most of the features of the regular Windows Notepad program (with a few issues I haven't worked out yet). It's not bad for two and a half days of coding.
 
 Issues:
 Printing does not go past one page for some reason.
+Printing also ignores page margins.
 One cannot search the document in the find dialog.
 Replace is not yet implemented.
 The font dialog, and changing printing fonts accordingly is not yet implemented.
