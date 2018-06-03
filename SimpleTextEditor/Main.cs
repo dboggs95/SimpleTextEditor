@@ -155,7 +155,7 @@ namespace SimpleTextEditor
             }
 
             char c = textBox1.Text[currentPosition];
-            int i = length - 1;
+            int i = query.Length - 1;
             do
             {
                 if (query[i].ToString() == c.ToString())
@@ -164,7 +164,7 @@ namespace SimpleTextEditor
                 }
                 else
                 {
-                    i = length - 1;
+                    i = query.Length - 1;
                 }
                 if (currentPosition != textBox1.TextLength)
                 {
@@ -175,8 +175,8 @@ namespace SimpleTextEditor
 
             if (i == 0)
             {
-                textBox1.SelectionStart = currentPosition - 1;
-                textBox1.SelectionLength = length;
+                textBox1.SelectionStart = currentPosition + 1;
+                textBox1.SelectionLength = query.Length;
             }
             else
             {
