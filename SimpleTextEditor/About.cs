@@ -29,7 +29,7 @@ namespace SimpleTextEditor
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://sites.google.com/view/daryl-boggs-portfolio");
+            System.Diagnostics.Process.Start("https://dboggs95.wixsite.com/portfolio");
         }
     }
 }
